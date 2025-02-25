@@ -1,0 +1,26 @@
+/*void create_lList(int a[],int n){
+    struct node *new_node,*tmp;
+
+    head = (struct node *)malloc(sizeof(struct node));
+
+    if(head==NULL)
+    {
+        cout<<"memory not allocated"<<endl;
+    }
+    else
+    {
+        head->data=a[0];
+        head->next=NULL;
+
+        tmp = head;
+        for(int i=1;i<n;i++)
+        {
+            new_node = (struct node *)malloc(sizeof(struct node));
+            new_node->data=a[i];
+            new_node->next=NULL;
+
+            tmp->next=new_node;
+            tmp=new_node;
+        }
+    }
+}*/
