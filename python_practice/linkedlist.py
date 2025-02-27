@@ -41,11 +41,11 @@ print("Original List:")
 linkedlist1.printlist(linkedlist1.first)
 
 # Reverse the linked list
-# linkedlist1.reverse()
+linkedlist1.reverse()
 
 # Print the reversed linked list using recursion
-# print("\nReversed List:")
-# linkedlist1.printlist(linkedlist1.first)
+print("\nReversed List:")
+linkedlist1.printlist(linkedlist1.first)
 
 
     

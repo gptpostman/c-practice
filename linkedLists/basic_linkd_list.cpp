@@ -22,7 +22,7 @@ void create_lList(int (&arr)[n])
     head = (struct node *)malloc(sizeof(struct node));
 
 
-    head->data=arr[0];                    //assign data to head's data
+    head->data=arr[0];                  //assign data to head's data
     head->next=NULL;                    //assign null to head's next
 
     temp = head;                        //make temp point on head
@@ -224,6 +224,28 @@ void insert_last(int val,node *p)
         p=p->next;
     }
 }
+
+void insert_at_last(int val)
+{
+    node *last;
+    node *temp = new node;
+    temp->data = val;
+    temp->next = NULL;
+    last = head;
+    if(head==NULL)
+    {
+        head = last = temp;
+    }
+    else
+    {
+        while(last->next != NULL)
+        {
+            last = last->next;
+        }
+        last->next = temp;
+    }
+}
+
 void insert_at_position(int val, int pos)
 {
     node *p;
@@ -268,22 +290,231 @@ void generic_insert(int val, int index, node *p)
     }
 }
 
+void sortedInsert(node *p, int val)
+{
+    node *t,*q=NULL;
+    t->data = val;
+    t->next = NULL;
+
+    if(head==NULL)
+    {
+        head = t;
+    }
+    else
+    {
+        while(p && p->data < val)
+        {
+            q=p;
+            p=p->next;
+        }
+        if(p==head)
+        {
+            t->next = head;
+            head = t;
+        }
+        else
+        {
+            t->next = q->next;
+            q->next = t;
+        }
+    }
+}
+
+void reverse1(node *p)          // reversing/swapping data in nodes instead of changing links using an array
+{
+    vector<int> a;
+    int i = 0;
+    while(p!=NULL)
+    {
+        a.push_back(p->data);
+        p=p->next;
+        i++;
+    }
+    p=head;
+    i--;
+    while(p!=NULL)
+    {
+        p->data = a[i];
+        p=p->next;
+        i--;
+    }
+}
+
+void reverse2(node *p)
+{
+    node *previous = NULL;  //q
+    node *temp = NULL;   //r
+    while(p!=NULL)
+    {
+        temp = previous;
+        previous = p;
+        p = p->next;
+        previous->next = temp;
+    }
+    head = previous;
+}
+
+void recurReverse1(node *p, node *q)    //passing two pointers as params
+{
+    if(p!=NULL)
+    {
+        recurReverse1(p->next,p);
+        p->next = q;
+    }
+    else
+    {
+        head = q;
+    }
+}
+
+void recurReverse2(node *p)    //passing only one pointer as param  
+{
+    if(p == NULL || p->next == NULL)
+    {
+        head = p;               //update head when the last node is reached
+        return;
+    }
+    recurReverse2(p->next);     //recursive call
+    p->next->next = p;          //reverse the link
+    p->next = NULL;             //set current node's next to null
+}
+
+int delete_node(node *p, int index)
+{
+    node *q = NULL;
+    int x = -1;
+
+    if (index < 1 || index > count(p))
+        return -1;
+
+    if(index == 1)
+    {
+        q=head;
+        x=head->data;
+        head = head->next;
+        free(q);        // use free() or delete in cpp & free in c
+        return x;
+    }
+    else
+    {
+        for(int i=0;i<index-1;i++)
+        {
+            q=p;
+            p=p->next;
+        }
+        q->next = p->next;
+        x=p->data;
+        free(p);        // use free() or delete in cpp & free in c
+        return x;
+    }
+}
+
+bool is_sorted_list(node *p)
+{
+    int x = INT_MIN;
+    while(p != NULL)
+    {   
+        if(p->data < x)
+            return false;
+        
+        x = p->data;
+        p = p->next;
+    }
+    return true;
+
+}
+
+void remove_duplicates(node *p)
+{
+    node *q = p->next;
+
+    while(q!=NULL)
+    {
+        if(p->data != q->data)
+        {
+            p=q;
+            q=q->next;
+        }
+        else
+        {
+            p->next = q->next;
+            free(q);
+            q=p->next;
+        }
+    }
+}
+
+void sort_list(node *&p) 
+{
+    if (!p || !p->next) return;  // Edge case: empty or single-node list
+
+    int n = count(p);  // Use the passed pointer
+
+    for (int i = n - 2; i >= 0; i--)         // Outer loop for passes 
+    {  
+        node *q = p;
+        node *x = p->next;
+
+        for (int j = 0; j <= i; j++)         // Inner loop for swaps 
+        {  
+            if (q->data > x->data) 
+            {
+                int temp = q->data;         // Swap values
+                q->data = x->data;
+                x->data = temp;
+            }
+            q = x;                          // Move forward
+            x = x->next;
+        }
+    }
+}
+
+
 int main()
 {
-    int arr[]={1,3,5,7,9,11,13,15,17,19};
+    // int arr[]={1,3,5,7,9,11,13,15,17,19};
+    int arr[] = {20,10,50,40,30};
     create_lList(arr);
     display_list();
+    
     // cout<<"count: "<<count(head)<<endl;
+    
     // cout<<"sum: "<<sum(head)<<endl;
+    
     // cout<<"max element: "<<max_element(head)<<endl;
     // cout<<"min element: "<<min_element(head)<<endl;
+    
     //cout<<"searched element: "<<lSearch(head,13)<<endl;
     //cout<<"searched element: "<<lSearch(head,19)<<endl;
-    generic_insert(10,0,head);
-    generic_insert(20,5,head);
-    generic_insert(30,12,head);
+    
+    // insert_at_last(30);
+    // insert_at_last(40);
+    // insert_at_last(50);
+    
+    //sortedInsert(head,55);
+    //sortedInsert(head,54);
+    //sortedInsert(head,56);
+    //sortedInsert(head,5\7);
+    
+    //display_list();
+    
+    // recurReverse2(head);
+
+    // generic_insert(10,0,head);
+    // generic_insert(20,5,head);
+    // generic_insert(30,12,head);
     // generic_insert(5,0,head);
     // generic_insert(25,3,head);
+
+    // delete_node(head,6);
+    //printf("Deleted element %d\n",delete_node(head,0));
+
+    // printf("sorted list?\n%s",is_sorted_list(head)?"yes":"no");
+
+    // remove_duplicates(head);
+
+    // sort_list(head);
+// 
     display_list();
     return 0;
 }
